@@ -55,7 +55,7 @@ public class SignupActivity extends AppCompatActivity {
 
                 final User user = new User(name, email, pass,referCode);
 
-                progressDialog.dismiss();
+                progressDialog.show();
                 auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {

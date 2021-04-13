@@ -4,31 +4,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentTransaction;
+
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import android.widget.Toast;
 
-import com.example.androidproject.adapter.CategoryAdapter;
-import com.example.androidproject.model.CategoryModel;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import me.ibrahimsn.lib.OnItemSelectedListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    CategoryAdapter categoryAdapter;
-    FirebaseFirestore database;
+
+    me.ibrahimsn.lib.SmoothBottomBar bottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,29 +30,44 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        database = FirebaseFirestore.getInstance();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        List<CategoryModel> categories = new ArrayList<>();
+        transaction.replace(R.id.content,  new HomeFragment());
+        transaction.commit();
 
-        database.collection("categories")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        categories.clear();
-                        for (DocumentSnapshot snapshot: value.getDocuments()){
-                            CategoryModel model = snapshot.toObject(CategoryModel.class);
-                            model.setCategoryId(snapshot.getId());
-                            categories.add(model);
-                        }
-                        categoryAdapter.notifyDataSetChanged();
-                    }
-                });
 
-        recyclerView = findViewById(R.id.categoryList);
-        categoryAdapter = new CategoryAdapter(this, categories);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(categoryAdapter);
+        bottomBar =  findViewById(R.id.bottomBar);
+        bottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public boolean onItemSelect(int i) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                switch (i){
+                    case 0:
+                        transaction.replace(R.id.content,  new HomeFragment());
+                        transaction.commit();
+
+                        break;
+                    case 1:
+                        transaction.replace(R.id.content,  new LeaderboardsFragment());
+                        transaction.commit();
+
+                        break;
+                    case 2:
+                        transaction.replace(R.id.content,  new WalletFragment());
+                        transaction.commit();
+                        break;
+                    case 3:
+                        transaction.replace(R.id.content,  new profileFragment());
+                        transaction.commit();
+                        break;
+                }
+                return false;
+            }
+        });
+
+
+
+
     }
 
     @Override
