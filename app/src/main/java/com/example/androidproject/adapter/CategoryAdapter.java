@@ -1,6 +1,7 @@
 package com.example.androidproject.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.androidproject.QuizActivity;
 import com.example.androidproject.R;
 import com.example.androidproject.model.CategoryModel;
 
@@ -40,6 +42,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.textView.setText(model.getCategoryName());
         //Category images
         Glide.with(context).load(model.getCategoryImage()).into(holder.imageView);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, QuizActivity.class);
+                intent.putExtra("catId",model.getCategoryId());
+                context.startActivity(intent);
+            }
+        });
 
     }
 
