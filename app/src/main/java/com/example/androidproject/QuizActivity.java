@@ -2,6 +2,7 @@ package com.example.androidproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -136,8 +137,8 @@ public class QuizActivity extends AppCompatActivity {
             correctAnswers++;
             textView.setBackgroundResource(R.drawable.option_right);
         }else{
-            showAnswer();
             textView.setBackgroundResource(R.drawable.option_wrong);
+
         }
     }
 
@@ -148,8 +149,8 @@ public class QuizActivity extends AppCompatActivity {
             option_2.setBackgroundResource(R.drawable.option_right);
         }else if(Allquestion.getAnswer().equals(option_3.getText().toString())){
             option_3.setBackgroundResource(R.drawable.option_right);
-        }else if(Allquestion.getAnswer().equals(option_3.getText().toString())){
-            option_3.setBackgroundResource(R.drawable.option_right);
+        }else if(Allquestion.getAnswer().equals(option_4.getText().toString())){
+            option_4.setBackgroundResource(R.drawable.option_right);
         }
     }
 
@@ -171,15 +172,19 @@ public class QuizActivity extends AppCompatActivity {
                 }
                 TextView selected = (TextView) view;
                 checkAnswer(selected);
-
+                showAnswer();
                 break;
             case R.id.nextBtn:
                 reset();
-                if (index < questions.size()){
+                if (index < questions.size()-1){
                     index++;
                     setNextQuestion();
                 }else{
-                    Toast.makeText(this, "Quiz Finished", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(QuizActivity.this, ResultActivity.class);
+                    intent.putExtra("correct", correctAnswers);
+                    intent.putExtra("total",questions.size());
+                    startActivity(intent);
+                    //Toast.makeText(this, "Quiz Finished", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
