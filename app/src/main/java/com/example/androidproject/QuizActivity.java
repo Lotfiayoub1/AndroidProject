@@ -8,12 +8,19 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
+import java.util.Random;
 
 public class QuizActivity extends AppCompatActivity {
 
     ArrayList<Question> questions;
     private  int index =0;
+    int correctAnswers =0;
     Question Allquestion;
     TextView question;
     TextView option_1;
@@ -23,6 +30,8 @@ public class QuizActivity extends AppCompatActivity {
     TextView questionCounter;
     TextView timer;
     CountDownTimer countDownTimer;
+
+    FirebaseFirestore database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +46,53 @@ public class QuizActivity extends AppCompatActivity {
         timer = findViewById(R.id.timer);
 
         questions = new ArrayList<>();
-        questions.add(new Question("What is earth?","Planet","Sun","Human","Car","Planet"));
-        questions.add(new Question("What is Samosa?","Planet","Food","Human","Car","Food"));
-        questions.add(new Question("What is tfaha?","Planet","Sun","Human","Car","Planet"));
+        database = FirebaseFirestore.getInstance();
+
+        final String catId = getIntent().getStringExtra("catId");
+        Random random = new Random();
+        final int rand = random.nextInt(5);
+
+        database.collection("categories")
+                .document(catId)
+                .collection("questions")
+                .whereGreaterThanOrEqualTo("index",rand)
+                .orderBy("index")
+                .limit(5).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (queryDocumentSnapshots.getDocuments().size() < 5) {
+                    database.collection("categories")
+                            .document(catId)
+                            .collection("questions")
+                            .whereLessThanOrEqualTo("index",rand)
+                            .orderBy("index")
+                            .limit(5).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                                for (DocumentSnapshot snapshot : queryDocumentSnapshots){
+                                    Question question = snapshot.toObject(Question.class);
+                                    questions.add(question);
+                                }
+                            setNextQuestion();
+
+
+                        }
+                    });
+                }else{
+                    for (DocumentSnapshot snapshot : queryDocumentSnapshots){
+                        Question question = snapshot.toObject(Question.class);
+                        questions.add(question);
+                    }
+                    setNextQuestion();
+                }
+            }
+        });
+
+
+
         resetTimer();
-        setNextQuestion();
+
     }
 
 
@@ -59,17 +110,7 @@ public class QuizActivity extends AppCompatActivity {
         };
     }
 
-    void showAnswer(){
-        if (Allquestion.getAnswer().equals(option_1.getText().toString())){
-            option_1.setBackgroundResource(R.drawable.option_right);
-        }else if(Allquestion.getAnswer().equals(option_2.getText().toString())){
-            option_2.setBackgroundResource(R.drawable.option_right);
-        }else if(Allquestion.getAnswer().equals(option_3.getText().toString())){
-            option_3.setBackgroundResource(R.drawable.option_right);
-        }else if(Allquestion.getAnswer().equals(option_3.getText().toString())){
-            option_3.setBackgroundResource(R.drawable.option_right);
-        }
-    }
+
 
     void setNextQuestion(){
         if (countDownTimer!= null){
@@ -92,10 +133,23 @@ public class QuizActivity extends AppCompatActivity {
     void checkAnswer(TextView textView){
         String selectedAnswer = textView.getText().toString();
         if (selectedAnswer.equals(Allquestion.getAnswer())){
+            correctAnswers++;
             textView.setBackgroundResource(R.drawable.option_right);
         }else{
             showAnswer();
             textView.setBackgroundResource(R.drawable.option_wrong);
+        }
+    }
+
+    void showAnswer(){
+        if (Allquestion.getAnswer().equals(option_1.getText().toString())){
+            option_1.setBackgroundResource(R.drawable.option_right);
+        }else if(Allquestion.getAnswer().equals(option_2.getText().toString())){
+            option_2.setBackgroundResource(R.drawable.option_right);
+        }else if(Allquestion.getAnswer().equals(option_3.getText().toString())){
+            option_3.setBackgroundResource(R.drawable.option_right);
+        }else if(Allquestion.getAnswer().equals(option_3.getText().toString())){
+            option_3.setBackgroundResource(R.drawable.option_right);
         }
     }
 
@@ -117,6 +171,7 @@ public class QuizActivity extends AppCompatActivity {
                 }
                 TextView selected = (TextView) view;
                 checkAnswer(selected);
+
                 break;
             case R.id.nextBtn:
                 reset();
