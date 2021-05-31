@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +32,7 @@ public class QuizActivity extends AppCompatActivity {
     TextView questionCounter;
     TextView timer;
     CountDownTimer countDownTimer;
-
+    private Button button;
     FirebaseFirestore database;
 
     @Override
@@ -45,7 +46,16 @@ public class QuizActivity extends AppCompatActivity {
         option_4 = (TextView) findViewById(R.id.option_4);
         questionCounter = findViewById(R.id.questionCounter);
         timer = findViewById(R.id.timer);
-
+        button = findViewById(R.id.quitBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(QuizActivity.this, ResultActivity.class);
+                intent.putExtra("correct", correctAnswers);
+                intent.putExtra("total",questions.size());
+                startActivity(intent);
+            }
+        });
         questions = new ArrayList<>();
         database = FirebaseFirestore.getInstance();
 
@@ -89,9 +99,6 @@ public class QuizActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
         resetTimer();
 
     }
@@ -102,10 +109,23 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 timer.setText(String.valueOf(millisUntilFinished/1000));
+
             }
 
             @Override
             public void onFinish() {
+                timer.setText("done!");
+                if (index < questions.size()-1){
+                    index++;
+                    //Toast.makeText(this, "Quiz Finished", Toast.LENGTH_SHORT).show();
+                    setNextQuestion();
+                }else{
+                    Intent intent = new Intent(QuizActivity.this, ResultActivity.class);
+                    intent.putExtra("correct", correctAnswers);
+                    intent.putExtra("total",questions.size());
+                    startActivity(intent);
+                    //Toast.makeText(this, "Quiz Finished", Toast.LENGTH_SHORT).show();
+                }
 
             }
         };
@@ -122,7 +142,6 @@ public class QuizActivity extends AppCompatActivity {
         if (index < questions.size()){
             questionCounter.setText(String.format("%d/%d",(index+1),questions.size()));
             Allquestion = questions.get(index);
-
             question.setText(Allquestion.getQuestion());
             option_1.setText(Allquestion.getOption1());
             option_2.setText(Allquestion.getOption2());
@@ -178,6 +197,7 @@ public class QuizActivity extends AppCompatActivity {
                 reset();
                 if (index < questions.size()-1){
                     index++;
+                    //Toast.makeText(this, "Quiz Finished", Toast.LENGTH_SHORT).show();
                     setNextQuestion();
                 }else{
                     Intent intent = new Intent(QuizActivity.this, ResultActivity.class);
@@ -187,6 +207,7 @@ public class QuizActivity extends AppCompatActivity {
                     //Toast.makeText(this, "Quiz Finished", Toast.LENGTH_SHORT).show();
                 }
                 break;
+
         }
     }
 }

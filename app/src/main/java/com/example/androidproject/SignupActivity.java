@@ -22,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class SignupActivity extends AppCompatActivity {
 
     Button submitBtn;
+    Button alreadyHave;
     EditText emailBox;
     EditText nameBox;
     EditText referBox;
@@ -36,10 +37,18 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         submitBtn = (Button) findViewById(R.id.loginBtn);
+        alreadyHave = (Button) findViewById(R.id.alreadyHave);
         emailBox = (EditText) findViewById(R.id.emailBox);
         nameBox = (EditText) findViewById(R.id.nameBox);
         referBox = (EditText) findViewById(R.id.referBox);
         passwordBox = (EditText) findViewById(R.id.passwordBox);
+        alreadyHave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
         auth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
         progressDialog = new ProgressDialog(this);

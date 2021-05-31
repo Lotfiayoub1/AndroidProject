@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Logging in...");
         emailBox = (EditText) findViewById(R.id.emailBox);
         passwordBox = (EditText) findViewById(R.id.passwordBox);
-        createAnAccount = (Button) findViewById(R.id.createAnAccount);
+        createAnAccount = (Button) findViewById(R.id.alreadyHave);
         loginBtn = (Button) findViewById(R.id.loginBtn);
 
         if (auth.getCurrentUser() != null){

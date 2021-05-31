@@ -155,7 +155,7 @@
         app:layout_constraintTop_toBottomOf="@+id/option_3" />
 
     <Button
-        android:id="@+id/quizBtn"
+        android:id="@+id/quitBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -182,7 +182,7 @@
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/quizBtn"
+        app:layout_constraintStart_toEndOf="@+id/quitBtn"
         app:layout_constraintTop_toBottomOf="@+id/option_4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
