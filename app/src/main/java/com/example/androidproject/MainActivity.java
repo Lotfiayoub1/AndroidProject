@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 
+import com.google.firebase.auth.FirebaseAuth;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 
@@ -21,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     me.ibrahimsn.lib.SmoothBottomBar bottomBar;
+    FirebaseAuth auth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.content,  new HomeFragment());
         transaction.commit();
 
-
+        auth = FirebaseAuth.getInstance();
         bottomBar =  findViewById(R.id.bottomBar);
         bottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -79,7 +83,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.wallet){
-            Toast.makeText(this, "Wall is clicked", Toast.LENGTH_SHORT).show();
+            auth.signOut();
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
+
+
+
         }
         return super.onOptionsItemSelected(item);
     }
