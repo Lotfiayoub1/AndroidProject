@@ -1,19 +1,28 @@
 package com.example.androidproject;
 
-import android.content.Intent;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 
 
 public class profileFragment extends Fragment {
+
     private FirebaseAuth firebaseAuth;
+    TextView emailUpdate;
+
+
+
 
     public  profileFragment(){
 
@@ -23,6 +32,11 @@ public class profileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         firebaseAuth = FirebaseAuth.getInstance();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        emailUpdate = getActivity().findViewById(R.id.emailUpdate);
+        //emailUpdate.setText(sharedPreferences.getString("email", " "));
+
+
 
     }
 
