@@ -1,50 +1,68 @@
 package com.example.androidproject;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.androidproject.adapter.CategoryAdapter;
-import com.example.androidproject.model.CategoryModel;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 
-import java.util.ArrayList;
-import java.util.List;
+import me.ibrahimsn.lib.OnItemSelectedListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    CategoryAdapter categoryAdapter;
+
+    me.ibrahimsn.lib.SmoothBottomBar bottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        List<CategoryModel> categories = new ArrayList<>();
-        categories.add(new CategoryModel("","Mathematics","https://cdn.dribbble.com/users/2552641/screenshots/6549959/icon_challenge_originals_edu2_1x.jpg"));
-        categories.add(new CategoryModel("","Science","https://pineapplemarketing.com.au/wp-content/uploads/2019/04/Science-icon.png"));
-        categories.add(new CategoryModel("","History","https://image.flaticon.com/icons/png/512/1800/1800196.png"));
-        categories.add(new CategoryModel("","Sport","https://cdn.iconscout.com/icon/premium/png-256-thumb/sport-2588906-2160920.png"));
-        categories.add(new CategoryModel("","Space","https://cdn4.iconfinder.com/data/icons/space-84/64/planet-science-space-education-512.png"));
-        categories.add(new CategoryModel("","Art","https://cdn.iconscout.com/icon/premium/png-256-thumb/art-1751606-1491810.png"));
 
-        recyclerView = findViewById(R.id.categoryList);
-        categoryAdapter = new CategoryAdapter(this, categories);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(categoryAdapter);
+        transaction.replace(R.id.content,  new HomeFragment());
+        transaction.commit();
+
+
+        bottomBar =  findViewById(R.id.bottomBar);
+        bottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public boolean onItemSelect(int i) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                switch (i){
+                    case 0:
+                        transaction.replace(R.id.content,  new HomeFragment());
+                        transaction.commit();
+
+                        break;
+                    case 1:
+                        transaction.replace(R.id.content,  new LeaderboardsFragment());
+                        transaction.commit();
+
+                        break;
+                    case 2:
+                        transaction.replace(R.id.content,  new WalletFragment());
+                        transaction.commit();
+                        break;
+                    case 3:
+                        transaction.replace(R.id.content,  new ProfileFragment());
+                        transaction.commit();
+                        break;
+                }
+                return false;
+            }
+        });
+
+
+
+
     }
 
     @Override
