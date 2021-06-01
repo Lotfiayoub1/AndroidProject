@@ -1,26 +1,23 @@
 package com.example.androidproject;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentTransaction;
-
-
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 
 public class MainActivity extends AppCompatActivity {
-
+    MediaPlayer mySong;
 
     me.ibrahimsn.lib.SmoothBottomBar bottomBar;
     FirebaseAuth auth;
@@ -28,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mySong = MediaPlayer.create(MainActivity.this,R.raw.sound);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -82,15 +80,27 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
         if (item.getItemId() == R.id.wallet){
+
             auth.signOut();
+
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
+
+
+
+
             Toast.makeText(this, "Log Out", Toast.LENGTH_SHORT).show();
 
 
 
         }
         return super.onOptionsItemSelected(item);
+
+
     }
+
+  
+
 }
