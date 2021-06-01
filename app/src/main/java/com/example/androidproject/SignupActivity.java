@@ -41,7 +41,7 @@ public class SignupActivity extends AppCompatActivity {
         binding.createNewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("ayman hmar");
+
                 mySong.start();
                mySong.setLooping(true);
                 String email, pass, name, referCode;
