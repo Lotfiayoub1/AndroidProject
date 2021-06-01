@@ -51,10 +51,10 @@ public class SignupActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                 startActivity(intent);
-                mySong.start();
-                mySong.setLooping(true);
+
             }
         });
+
         auth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
         progressDialog = new ProgressDialog(this);
@@ -62,6 +62,9 @@ public class SignupActivity extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mySong.start();
+                mySong.setLooping(true);
+
                 String email, pass, name, referCode;
                 email = emailBox.getText().toString();
                 pass = passwordBox.getText().toString();
@@ -107,5 +110,8 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+
     }
+   
+
 }
