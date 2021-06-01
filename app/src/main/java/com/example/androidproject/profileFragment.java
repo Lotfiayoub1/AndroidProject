@@ -4,6 +4,8 @@ package com.example.androidproject;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.preference.PreferenceManager;
@@ -28,15 +30,16 @@ public class profileFragment extends Fragment {
 
     }
 
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         firebaseAuth = FirebaseAuth.getInstance();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        emailUpdate = getActivity().findViewById(R.id.emailUpdate);
-        //emailUpdate.setText(sharedPreferences.getString("email", " "));
-
-
+        emailUpdate = requireActivity().findViewById(R.id.emailUpdate);
+        if (emailUpdate != null){
+            emailUpdate.setText(sharedPreferences.getString("email", " "));
+        }
 
     }
 

@@ -30,8 +30,6 @@ public class SignupActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseFirestore database;
     ProgressDialog progressDialog;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,36 +62,37 @@ public class SignupActivity extends AppCompatActivity {
 
                 final User user = new User(name, email, pass,referCode);
 
-                progressDialog.show();
-                auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            String uid = task.getResult().getUser().getUid();
-                            database.collection("user")
-                                    .document(uid)
-                                    .set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()){
-                                        progressDialog.dismiss();
-                                        startActivity(new Intent(SignupActivity.this, MainActivity.class));
-                                        finish();
-                                    }else{
-                                        Toast.makeText(SignupActivity.this,task.getException().getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                if (!email.equals("") || !pass.equals("") || !name.equals("")){
+                    progressDialog.show();
+                    auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                String uid = task.getResult().getUser().getUid();
+                                database.collection("user")
+                                        .document(uid)
+                                        .set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()){
+                                            progressDialog.dismiss();
+                                            startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                                            finish();
+                                        }else{
+                                            Toast.makeText(SignupActivity.this,task.getException().getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-
-                                }
-                            });
-
-                        }else {
-                            progressDialog.dismiss();
-                            Toast.makeText(SignupActivity.this,task.getException().getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                                });
+                            }else {
+                                progressDialog.dismiss();
+                                Toast.makeText(SignupActivity.this,task.getException().getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
-
-
+                    });
+                }
+                else {
+                    Toast.makeText(SignupActivity.this,"The fields are empty",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
