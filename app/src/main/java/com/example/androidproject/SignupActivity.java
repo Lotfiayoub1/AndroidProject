@@ -47,11 +47,12 @@ public class SignupActivity extends AppCompatActivity {
         alreadyHave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mySong.start();
-                mySong.setLooping(true);
+
 
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                 startActivity(intent);
+                mySong.start();
+                mySong.setLooping(true);
             }
         });
         auth = FirebaseAuth.getInstance();

@@ -153,6 +153,7 @@
                 android:background="@drawable/submit_btn"
                 android:hapticFeedbackEnabled="false"
                 android:text="Submit"
+                tools:ignore="OnClick"
                 android:textColor="@color/color_white"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/alreadyHave"
