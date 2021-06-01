@@ -1,13 +1,14 @@
 package com.example.androidproject;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.androidproject.databinding.ActivitySignupBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignupActivity extends AppCompatActivity {
-
+    MediaPlayer mySong;
     ActivitySignupBinding binding;
     FirebaseAuth auth;
     FirebaseFirestore database;
@@ -29,7 +30,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySignupBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        mySong = MediaPlayer.create(SignupActivity.this,R.raw.sound);
         auth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
 
@@ -40,6 +41,9 @@ public class SignupActivity extends AppCompatActivity {
         binding.createNewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("ayman hmar");
+                mySong.start();
+               mySong.setLooping(true);
                 String email, pass, name, referCode;
 
                 email = binding.emailBox.getText().toString();
@@ -63,6 +67,7 @@ public class SignupActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()) {
+
                                         dialog.dismiss();
                                         startActivity(new Intent(SignupActivity.this, MainActivity.class));
                                         finish();
@@ -76,11 +81,19 @@ public class SignupActivity extends AppCompatActivity {
                             Toast.makeText(SignupActivity.this, task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
+
                 });
 
             }
+
         });
 
 
+
     }
+    /*public void playIT(View v){
+        System.out.println("ayman hmar");
+        mySong.start();
+
+    }*/
 }
