@@ -61,13 +61,13 @@ public class QuizActivity extends AppCompatActivity {
 
         final String catId = getIntent().getStringExtra("catId");
         Random random = new Random();
-        final int rand = random.nextInt(5);
+        final int rand = random.nextInt(12)+1;
 
         database.collection("categories")
                 .document(catId)
                 .collection("questions")
                 .whereGreaterThanOrEqualTo("index",rand)
-                .orderBy("index")
+                //.orderBy("index")
                 .limit(5).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -76,7 +76,7 @@ public class QuizActivity extends AppCompatActivity {
                             .document(catId)
                             .collection("questions")
                             .whereLessThanOrEqualTo("index",rand)
-                            .orderBy("index")
+
                             .limit(5).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -86,8 +86,6 @@ public class QuizActivity extends AppCompatActivity {
                                     questions.add(question);
                                 }
                             setNextQuestion();
-
-
                         }
                     });
                 }else{
