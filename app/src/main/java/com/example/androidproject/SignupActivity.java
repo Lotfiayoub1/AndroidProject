@@ -1,17 +1,18 @@
 package com.example.androidproject;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.androidproject.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,7 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class SignupActivity extends AppCompatActivity {
-
+    MediaPlayer mySong;
     Button submitBtn;
     Button alreadyHave;
     EditText emailBox;
@@ -36,6 +37,7 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        mySong = MediaPlayer.create(SignupActivity.this,R.raw.sound);
         submitBtn = (Button) findViewById(R.id.loginBtn);
         alreadyHave = (Button) findViewById(R.id.alreadyHave);
         emailBox = (EditText) findViewById(R.id.emailBox);
@@ -45,6 +47,9 @@ public class SignupActivity extends AppCompatActivity {
         alreadyHave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mySong.start();
+                mySong.setLooping(true);
+
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
