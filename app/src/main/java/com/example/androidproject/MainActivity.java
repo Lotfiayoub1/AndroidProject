@@ -84,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.wallet){
 
             auth.signOut();
-
+            mySong.release();
+            mySong.release();
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
 
@@ -101,6 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-  
+
 
 }
